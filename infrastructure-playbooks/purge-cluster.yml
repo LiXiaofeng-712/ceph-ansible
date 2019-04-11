@@ -257,11 +257,6 @@
       - reboot_osd_node
       - remove_osd_mountpoints.failed is defined
 
-  - name: see if ceph-disk is installed
-    shell: "which ceph-disk"
-    failed_when: false
-    register: ceph_disk_present
-
   - name: wipe table on dm-crypt devices
     command: dmsetup wipe_table --force "{{ item }}"
     with_items: "{{ encrypted_ceph_partuuid.stdout_lines }}"
@@ -324,7 +319,6 @@
     with_items: "{{ lvm_volumes }}"
     when:
       - lvm_volumes | default([]) | length > 0
-      - osd_scenario == "lvm"
       - ceph_volume_present.rc == 0
 
   - name: zap and destroy osds created by ceph-volume with devices
@@ -336,7 +330,6 @@
     with_items: "{{ devices | default([]) }}"
     when:
       - devices | default([]) | length > 0
-      - osd_scenario == "lvm"
       - ceph_volume_present.rc == 0
 
   - name: get ceph block partitions
