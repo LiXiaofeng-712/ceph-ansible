@@ -78,8 +78,8 @@ centos_package_dependencies:
   - libselinux-python
 
 redhat_package_dependencies:
-  - python-pycurl
-  - python-setuptools
+  - "{{ 'python-pycurl3' if ansible_os_family == 'RedHat' and ansible_distribution_major_version == '8' else 'python-pycurl' }}"
+  - "{{ 'python-setuptools3' if ansible_os_family == 'RedHat' and ansible_distribution_major_version == '8' else 'python-setuptools' }}"
 
 suse_package_dependencies:
   - python-pycurl
